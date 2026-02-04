@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VidSphere – Watch Videos</title>
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --text: #f1f1f1;
+      --gray: #aaaaaa;
+      --darkgray: #181818;
+      --accent: #ff0000; /* red like classic video platforms */
+      --sidebar-width: 240px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--darkgray);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      z-index: 100;
+      border-bottom: 1px solid #303030;
+    }
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 180px;
+    }
+    .logo {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: white;
+    }
+    .logo span { color: var(--accent); }
+    .menu-btn {
+      background: none;
+      border: none;
+      color: var(--gray);
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 8px;
+      margin-right: 16px;
+    }
+    .search-area {
+      flex: 1;
+      max-width: 700px;
+      display: flex;
+      justify-content: center;
+    }
+    .search-form {
+      display: flex;
+      width: 100%;
+      max-width: 580px;
+    }
+    .search-input {
+      flex: 1;
+      padding: 8px 12px;
+      font-size: 1rem;
+      background: #121212;
+      border: 1px solid #303030;
+      border-right: none;
+      border-radius: 2px 0 0 2px;
+      color: white;
+      outline: none;
+    }
+    .search-btn {
+      padding: 0 20px;
+      background: #222;
+      border: 1px solid #303030;
+      border-radius: 0 2px 2px 0;
+      color: var(--gray);
+      cursor: pointer;
+    }
+    .right-icons {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      min-width: 225px;
+      justify-content: flex-end;
+    }
+    .icon-btn {
+      background: none;
+      border: none;
+      color: var(--gray);
+      font-size: 1.4rem;
+      cursor: pointer;
+      position: relative;
+    }
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #3ea6ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+
+    /* Sidebar */
+    aside {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: var(--darkgray);
+      padding-top: 12px;
+      overflow-y: auto;
+      border-right: 1px solid #303030;
+      transition: width 0.3s;
+    }
+    aside.closed { width: 72px; }
+    aside.closed .sidebar-text { display: none; }
+    aside.closed .logo-area { justify-content: center; }
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 24px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.95rem;
+      gap: 24px;
+    }
+    .sidebar-item:hover { background: #272727; }
+    .sidebar-item.active { background: #272727; font-weight: 500; }
+    .sidebar-text { white-space: nowrap; }
+
+    /* Main content */
+    main {
+      margin-left: var(--sidebar-width);
+      margin-top: 56px;
+      padding: 24px 16px;
+      transition: margin-left 0.3s;
+    }
+    main.closed { margin-left: 72px; }
+
+    /* Categories row */
+    .categories {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .chip {
+      padding: 6px 14px;
+      background: #222;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .chip.active { background: white; color: black; }
+
+    /* Video grid */
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px 12px;
+    }
+    .video-card {
+      cursor: pointer;
+    }
+    .thumbnail {
+      position: relative;
+      background: #222;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 16/9;
+    }
+    .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+    .duration {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.85);
+      color: white;
+      font-size: 0.75rem;
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+    .video-info {
+      padding: 12px 0;
+      display: flex;
+      gap: 12px;
+    }
+    .channel-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #065fd4;
+      flex-shrink: 0;
+    }
+    .video-details h3 {
+      font-size: 0.95rem;
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+    .channel-name, .meta {
+      font-size: 0.85rem;
+      color: var(--gray);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1024px) {
+      aside { width: 72px; }
+      aside .sidebar-text { display: none; }
+      main { margin-left: 72px; }
+    }
+    @media (max-width: 600px) {
+      header { padding: 0 8px; }
+      .search-area { max-width: 300px; }
+      .right-icons { gap: 16px; }
+      .logo-area { min-width: auto; }
+      .menu-btn { margin-right: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <button class="menu-btn" onclick="document.querySelector('aside').classList.toggle('closed'); document.querySelector('main').classList.toggle('closed');">☰</button>
+    <div class="logo">Vid<span>Sphere</span></div>
+  </div>
+
+  <div class="search-area">
+    <form class="search-form">
+      <input type="search" class="search-input" placeholder="Search videos..." />
+      <button type="submit" class="search-btn">🔍</button>
+    </form>
+  </div>
+
+  <div class="right-icons">
+    <button class="icon-btn">🎥</button>
+    <button class="icon-btn">🔔</button>
+    <div class="avatar">PD</div>
+  </div>
+</header>
+
+<aside>
+  <a href="#" class="sidebar-item active"><span>🏠</span><span class="sidebar-text">Home</span></a>
+  <a href="#" class="sidebar-item"><span>🔥</span><span class="sidebar-text">Trending</span></a>
+  <a href="#" class="sidebar-item"><span>▶️</span><span class="sidebar-text">Subscriptions</span></a>
+  <hr style="border-color:#303030; margin:12px 0;" />
+  <a href="#" class="sidebar-item"><span>📚</span><span class="sidebar-text">Library</span></a>
+  <a href="#" class="sidebar-item"><span>🕒</span><span class="sidebar-text">History</span></a>
+  <a href="#" class="sidebar-item"><span>📺</span><span class="sidebar-text">Your Videos</span></a>
+  <a href="#" class="sidebar-item"><span>⏰</span><span class="sidebar-text">Watch Later</span></a>
+</aside>
+
+<main>
+  <div class="categories">
+    <div class="chip active">All</div>
+    <div class="chip">Music</div>
+    <div class="chip">Gaming</div>
+    <div class="chip">Tech</div>
+    <div class="chip">Comedy</div>
+    <div class="chip">News</div>
+    <div class="chip">Movies</div>
+    <div class="chip">Live</div>
+  </div>
+
+  <div class="video-grid">
+    <!-- Sample video cards – duplicate & change as needed -->
+    <div class="video-card">
+      <div class="thumbnail">
+        <img src="https://via.placeholder.com/480x270/222/aaa?text=Video+1" alt="Thumbnail">
+        <div class="duration">12:45</div>
+      </div>
+      <div class="video-info">
+        <div class="channel-avatar"></div>
+        <div class="video-details">
+          <h3>Awesome Tech Review 2026 – Must Watch!</h3>
+          <div class="channel-name">TechZone</div>
+          <div class="meta">1.2M views • 2 days ago</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="thumbnail">
+        <img src="https://via.placeholder.com/480x270/222/aaa?text=Video+2" alt="Thumbnail">
+        <div class="duration">8:22</div>
+      </div>
+      <div class="video-info">
+        <div class="channel-avatar"></div>
+        <div class="video-details">
+          <h3>Funny Moments Compilation #45</h3>
+          <div class="channel-name">LaughDaily</div>
+          <div class="meta">3.5M views • 5 days ago</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add 10–20 more .video-card elements here for a full grid look -->
+    <!-- You can copy-paste the block above and change text/images -->
+  </div>
+</main>
+
+</body>
+</html>

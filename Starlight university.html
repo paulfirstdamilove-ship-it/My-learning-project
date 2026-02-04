@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Starlight University • Student Portal</title>
+  <style>
+    :root {
+      --primary: #004d99;
+      --light: #f8f9fa;
+      --dark: #2d3436;
+      --gray: #636e72;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: var(--light);
+      color: var(--dark);
+    }
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 0.8rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo { font-size: 1.5rem; font-weight: bold; }
+    .user-info { display: flex; align-items: center; gap: 1rem; }
+    nav {
+      width: 240px;
+      background: white;
+      height: calc(100vh - 60px);
+      position: fixed;
+      border-right: 1px solid #ddd;
+      padding-top: 1.5rem;
+    }
+    nav a {
+      display: block;
+      padding: 1rem 1.5rem;
+      color: var(--dark);
+      text-decoration: none;
+      border-left: 4px solid transparent;
+    }
+    nav a:hover, nav a.active {
+      background: #f0f4f8;
+      border-left-color: var(--primary);
+      font-weight: 500;
+    }
+    main {
+      margin-left: 240px;
+      padding: 2rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+    }
+    .card h3 { margin-bottom: 1rem; color: var(--primary); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Starlight University</div>
+  <div class="user-info">
+    <span>Welcome, Paul First-Dami</span>
+    <button style="padding:0.5rem 1rem; background:#fff; color:var(--primary); border:none; border-radius:6px; cursor:pointer;">
+      Logout
+    </button>
+  </div>
+</header>
+
+<nav>
+  <a href="#" class="active">Dashboard</a>
+  <a href="#">My Courses</a>
+  <a href="#">Grades & Transcript</a>
+  <a href="#">Timetable</a>
+  <a href="#">Payments & Fees</a>
+  <a href="#">Library</a>
+  <a href="#">Announcements</a>
+  <a href="#">Profile & Settings</a>
+</nav>
+
+<main>
+  <h1>Dashboard</h1>
+  <p style="color:var(--gray);">2025/2026 Academic Session • Second Semester</p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Current Courses (5)</h3>
+      <ul style="list-style:none; line-height:1.8;">
+        <li>→ CSC 302 – Database Systems</li>
+        <li>→ CSC 304 – Software Engineering</li>
+        <li>→ GST 222 – Peace & Conflict Resolution</li>
+        <li>→ MTH 302 – Linear Algebra</li>
+        <li>→ PHY 202 – Electricity & Magnetism</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Upcoming Deadlines</h3>
+      <ul style="list-style:none; line-height:1.8;">
+        <li><strong>Tomorrow</strong> – Database Assignment</li>
+        <li><strong>Jan 28</strong> – SE Project Proposal</li>
+        <li><strong>Feb 4</strong> – Mid-semester Test</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Quick Announcements</h3>
+      <p>➜ Resumption fee payment deadline extended to Feb 10</p>
+      <p>➜ SIWES orientation holds next week Monday</p>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scientific Calculator - Working 2025</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .calc {
+      background: #0f172a;
+      border-radius: 16px;
+      padding: 20px;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .screen {
+      background: #000;
+      color: white;
+      font-size: 2.4rem;
+      text-align: right;
+      padding: 20px 15px;
+      border-radius: 10px;
+      min-height: 70px;
+      margin-bottom: 15px;
+      word-break: break-all;
+      font-family: monospace;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    button {
+      padding: 18px;
+      font-size: 1.35rem;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+    }
+    .num     { background: #334155; }
+    .op      { background: #475569; }
+    .sci     { background: #1e40af; }
+    .clear   { background: #dc2626; }
+    .equal   { background: #16a34a; grid-column: span 2; }
+    .zero    { grid-column: span 2; }
+  </style>
+</head>
+<body>
+
+<div class="calc">
+  <div class="screen" id="screen">0</div>
+
+  <div class="buttons">
+    <button class="clear"   onclick="clearAll()">C</button>
+    <button class="sci"     onclick="add('(')">(</button>
+    <button class="sci"     onclick="add(')')">)</button>
+    <button class="op"      onclick="add('/')">/</button>
+
+    <button class="sci"     onclick="add('sin(')">sin</button>
+    <button class="sci"     onclick="add('cos(')">cos</button>
+    <button class="sci"     onclick="add('tan(')">tan</button>
+    <button class="op"      onclick="add('*')">×</button>
+
+    <button class="num"     onclick="add('7')">7</button>
+    <button class="num"     onclick="add('8')">8</button>
+    <button class="num"     onclick="add('9')">9</button>
+    <button class="op"      onclick="add('-')">-</button>
+
+    <button class="num"     onclick="add('4')">4</button>
+    <button class="num"     onclick="add('5')">5</button>
+    <button class="num"     onclick="add('6')">6</button>
+    <button class="op"      onclick="add('+')">+</button>
+
+    <button class="num"     onclick="add('1')">1</button>
+    <button class="num"     onclick="add('2')">2</button>
+    <button class="num"     onclick="add('3')">3</button>
+    <button class="sci"     onclick="add('Math.sqrt(')">√</button>
+
+    <button class="num zero" onclick="add('0')">0</button>
+    <button class="num"     onclick="add('.')">.</button>
+    <button class="sci"     onclick="add('**2')">x²</button>
+    <button class="equal"   onclick="calculate()">=</button>
+  </div>
+</div>
+
+<script>
+const screen = document.getElementById('screen');
+let current = '0';
+
+// 1. Move toRad to global scope for eval to see it
+const toRad = (deg) => deg * Math.PI / 180;
+
+function update() {
+    screen.textContent = current || '0';
+}
+
+function add(str) {
+    if (current === '0' || current === 'Error') {
+        current = str;
+    } else {
+        current += str;
+    }
+    update();
+}
+
+function clearAll() {
+    current = '0';
+    update();
+}
+
+function calculate() {
+    try {
+        let expr = current;
+        
+        // 2. Advanced replacement to wrap degrees in toRad()
+        // This looks for sin/cos/tan followed by numbers and wraps them
+        expr = expr.replace(/sin\(([^)]+)\)/g, 'Math.sin(toRad($1))')
+                   .replace(/cos\(([^)]+)\)/g, 'Math.cos(toRad($1))')
+                   .replace(/tan\(([^)]+)\)/g, 'Math.tan(toRad($1))');
+
+        // Handle square root and other symbols
+        expr = expr.replace(/√/g, 'Math.sqrt');
+
+        // Auto-close missing parentheses
+        let open = (expr.match(/\(/g) || []).length;
+        let close = (expr.match(/\)/g) || []).length;
+        if (open > close) expr += ')'.repeat(open - close);
+
+        let result = eval(expr);
+        
+        if (isNaN(result) || !isFinite(result)) throw new Error();
+        
+        // Limit precision to 8 decimals to avoid floating point junk (0.1+0.2)
+        current = parseFloat(result.toFixed(8)).toString();
+    } catch (e) {
+        current = 'Error';
+    }
+    update();
+}
+
+// Keyboard support
+document.addEventListener('keydown', e => {
+    const keys = ['0','1','2','3','4','5','6','7','8','9','.', '+', '-', '/', '*', '(', ')'];
+    if (keys.includes(e.key)) add(e.key === '*' ? '×' : e.key);
+    if (e.key === 'Enter') calculate();
+    if (e.key === 'Backspace') {
+        current = current.length <= 1 ? '0' : current.slice(0, -1);
+        update();
+    }
+    if (e.key === 'Escape') clearAll();
+});
+update();
+
+</script>
+</body>
+</html>

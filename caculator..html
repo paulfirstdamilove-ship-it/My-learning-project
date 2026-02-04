@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simple Calculator - IFT 203 (Operators on Right)</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .calculator {
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+      padding: 25px;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .display {
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 2.8rem;
+      text-align: right;
+      padding: 20px 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      min-height: 85px;
+      overflow: hidden;
+      word-wrap: break-word;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    button {
+      padding: 20px;
+      font-size: 1.45rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-weight: 500;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    }
+
+    .number, .decimal, .zero {
+      background: #e9ecef;
+      color: #333;
+    }
+
+    .operator, .clear {
+      background: #ff9500;
+      color: white;
+    }
+
+    .equal {
+      background: #28a745;
+      color: white;
+      grid-row: span 2;   /* = button is taller, spans two rows */
+    }
+
+    .zero {
+      grid-column: span 2;
+    }
+
+    /* Right column styling for operators */
+    .col-operator {
+      grid-column: 4;
+      background: #fd7e14;
+    }
+
+    @media (max-width: 420px) {
+      .calculator { padding: 18px; }
+      button { padding: 18px; font-size: 1.35rem; }
+      .display { font-size: 2.4rem; padding: 18px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator">
+    <div class="display" id="display">0</div>
+
+    <div class="buttons">
+      <!-- Row 1 -->
+      <button class="clear" onclick="clearDisplay()">C</button>
+      <button class="number" onclick="appendToDisplay('7')">7</button>
+      <button class="number" onclick="appendToDisplay('8')">8</button>
+      <button class="operator col-operator" onclick="appendToDisplay('/')">/</button>
+
+      <!-- Row 2 -->
+      <button class="number" onclick="appendToDisplay('9')">9</button>
+      <button class="number" onclick="appendToDisplay('4')">4</button>
+      <button class="number" onclick="appendToDisplay('5')">5</button>
+      <button class="operator col-operator" onclick="appendToDisplay('*')">×</button>
+
+      <!-- Row 3 -->
+      <button class="number" onclick="appendToDisplay('6')">6</button>
+      <button class="number" onclick="appendToDisplay('1')">1</button>
+      <button class="number" onclick="appendToDisplay('2')">2</button>
+      <button class="operator col-operator" onclick="appendToDisplay('-')">-</button>
+
+      <!-- Row 4 -->
+      <button class="number" onclick="appendToDisplay('3')">3</button>
+      <button class="number" onclick="appendToDisplay('0')">0</button>
+      <button class="decimal" onclick="appendToDisplay('.')">.</button>
+      <button class="operator col-operator" onclick="appendToDisplay('+')">+</button>
+
+      <!-- Row 5 - Equal spans two rows vertically -->
+      <button class="equal" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById('display');
+
+    function appendToDisplay(value) {
+      if (display.innerText === '0' && value !== '.') {
+        display.innerText = value;
+      } else {
+        display.innerText += value;
+      }
+    }
+
+    function clearDisplay() {
+      display.innerText = '0';
+    }
+
+    function calculate() {
+      try {
+        let expression = display.innerText.replace(/×/g, '*');
+        let result = eval(expression);
+
+        if (!isFinite(result) || isNaN(result)) {
+          display.innerText = 'Error';
+        } else {
+          display.innerText = Number.isInteger(result) ? result : result.toFixed(8);
+        }
+      } catch (err) {
+        display.innerText = 'Error';
+      }
+    }
+
+    // Optional: Keyboard support
+    document.addEventListener('keydown', (e) => {
+      if (e.key >= '0' && e.key <= '9') appendToDisplay(e.key);
+      if (e.key === '.') appendToDisplay('.');
+      if (['+', '-', '*', '/'].includes(e.key)) {
+        appendToDisplay(e.key === '*' ? '×' : e.key);
+      }
+      if (e.key === 'Enter' || e.key === '=') calculate();
+      if (e.key === 'Backspace') {
+        display.innerText = display.innerText.length > 1 
+          ? display.innerText.slice(0, -1) 
+          : '0';
+      }
+      if (e.key === 'Escape' || e.key.toLowerCase() === 'c') clearDisplay();
+    });
+  </script>
+
+</body>
+</html>
