@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Akerele Paul | Portfolio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f0f1a;
+      color: #e0e0ff;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+    nav {
+      position: fixed;
+      top: 0; width: 100%;
+      padding: 1.2rem 5%;
+      background: rgba(15,15,26,0.85);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s;
+    }
+    nav.scrolled { padding: 0.8rem 5%; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+    .logo { font-size: 1.6rem; font-weight: 800; color: #a78bfa; }
+    .nav-links a {
+      color: #e0e0ff; text-decoration: none; margin-left: 2.5rem;
+      font-weight: 500; transition: color 0.3s;
+    }
+    .nav-links a:hover { color: #a78bfa; }
+    #home {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 5%;
+      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+    }
+    .hero-content { max-width: 900px; text-align: center; }
+    .hero-content h1 { font-size: 3.8rem; margin-bottom: 1rem; }
+    .typing { color: #a78bfa; font-weight: 600; }
+    .hero-content p { font-size: 1.3rem; margin: 1.5rem 0 2.5rem; color: #b0b0ff; max-width: 700px; margin-left: auto; margin-right: auto; }
+    .cta-btn {
+      display: inline-block; padding: 0.9rem 2.2rem;
+      background: #7c3aed; color: white; text-decoration: none;
+      border-radius: 50px; font-weight: 600;
+      transition: all 0.3s; box-shadow: 0 5px 15px rgba(124,58,237,0.4);
+    }
+    .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(124,58,237,0.5); background: #9f7aea; }
+    #projects { padding: 8rem 5%; background: #0a0a14; }
+    h2 { text-align: center; font-size: 3rem; margin-bottom: 4rem; color: #a78bfa; }
+    .projects-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2.5rem; max-width: 1400px; margin: 0 auto;
+    }
+    .project-card {
+      background: #161625; border-radius: 16px; overflow: hidden;
+      transition: all 0.4s ease; border: 1px solid #2a2a40;
+    }
+    .project-card:hover { transform: translateY(-12px); border-color: #7c3aed; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+    .project-card img { width: 100%; height: 220px; object-fit: cover; transition: transform 0.6s ease; }
+    .project-card:hover img { transform: scale(1.08); }
+    .project-info { padding: 1.8rem; }
+    .project-info h3 { color: #d1d1ff; margin-bottom: 0.8rem; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .tag { background: #2a2a40; padding: 0.4rem 1rem; border-radius: 30px; font-size: 0.85rem; color: #c4b5fd; }
+    #contact { padding: 8rem 5%; background: linear-gradient(135deg, #0f0f1a, #1a1a2e); }
+    .contact-container { max-width: 700px; margin: 0 auto; }
+    form { display: grid; gap: 1.4rem; }
+    input, textarea {
+      width: 100%; padding: 1rem 1.3rem;
+      background: #1e1e2f; border: 1px solid #3a3a55; border-radius: 10px;
+      color: white; font-size: 1.05rem; transition: all 0.3s;
+    }
+    input:focus, textarea:focus { outline: none; border-color: #a78bfa; box-shadow: 0 0 0 3px rgba(167,139,250,0.2); }
+    button[type="submit"] {
+      padding: 1rem; background: #7c3aed; color: white; border: none;
+      border-radius: 10px; font-size: 1.1rem; font-weight: 600;
+      cursor: pointer; transition: all 0.3s;
+    }
+    button[type="submit"]:hover { background: #9f7aea; transform: translateY(-2px); }
+    #form-status { margin-top: 1rem; font-weight: 500; text-align: center; }
+    footer { text-align: center; padding: 3rem 1rem; background: #0a0a14; color: #8888aa; }
+    @media (max-width: 768px) {
+      .hero-content h1 { font-size: 2.8rem; }
+      .nav-links a { margin-left: 1.2rem; font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <div class="logo">Akerele Paul</div>
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <section id="home">
+    <div class="hero-content">
+      <h1>Hi, I'm <span class="typing" id="typing-text"></span></h1>
+      <p>Full-Stack Developer & UI/UX Enthusiast crafting beautiful and functional digital experiences.</p>
+      <a href="#projects" class="cta-btn">View My Work →</a>
+    </div>
+  </section>
+
+  <section id="projects">
+    <h2>My Projects</h2>
+    <div class="projects-grid">
+      <!-- Add your real projects here -->
+      <div class="project-card">
+        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800" alt="Project">
+        <div class="project-info">
+          <h3>Project One</h3>
+          <p>Description of your first project. Replace this text.</p>
+          <div class="project-tags">
+            <span class="tag">React</span>
+            <span class="tag">Node.js</span>
+          </div>
+        </div>
+      </div>
+      <!-- Add more cards as needed -->
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="contact-container">
+      <h2>Get In Touch</h2>
+      <form id="contact-form">
+        <input type="text" name="name" id="name" placeholder="Your Name" required minlength="2">
+        <input type="email" name="email" id="email" placeholder="Your Email" required>
+        <textarea name="message" id="message" rows="6" placeholder="Your Message..." required minlength="10"></textarea>
+        <button type="submit" id="submit-btn">Send Message</button>
+        <div id="form-status"></div>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Akerele Paul. Built with passion.</p>
+  </footer>
+
+  <script>
+    // Navbar scroll
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Typing effect
+    const texts = ["Developer", "Creator", "Akerele Paul"];
+    let textIndex = 0, charIndex = 0, isDeleting = false;
+    const typingElement = document.getElementById('typing-text');
+    function type() {
+      const current = texts[textIndex];
+      typingElement.textContent = isDeleting 
+        ? current.substring(0, charIndex - 1) 
+        : current.substring(0, charIndex + 1);
+      charIndex += isDeleting ? -1 : 1;
+      let speed = isDeleting ? 60 : 100;
+      if (!isDeleting && charIndex === current.length) { speed = 1800; isDeleting = true; }
+      else if (isDeleting && charIndex === 0) { isDeleting = false; textIndex = (textIndex + 1) % texts.length; }
+      setTimeout(type, speed);
+    }
+    setTimeout(type, 800);
+
+    // Form submission
+    const form = document.getElementById('contact-form');
+    const status = document.getElementById('form-status');
+    const btn = document.getElementById('submit-btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.textContent = '';
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      const data = Object.fromEntries(new FormData(form));
+
+      try {
+        const res = await fetch('http://localhost:5000/api/contact', {   // ← Change to your deployed URL later
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+        if (res.ok) {
+          status.style.color = '#a78bfa';
+          status.textContent = result.message || 'Message sent successfully!';
+          form.reset();
+        } else {
+          throw new Error(result.message || 'Failed to send');
+        }
+      } catch (err) {
+        status.style.color = '#ff6b6b';
+        status.textContent = err.message || 'Something went wrong. Try again.';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+      }
+    });
+  </script>
+</body>
+</html>
